@@ -1,8 +1,9 @@
 import json
 import os
-
+import re
 from collections.abc import Iterable
 
+from scrapers import handle_fanfiction_story, close_gracefully
 
 
 possible_paths = [
@@ -40,8 +41,10 @@ def flatten(l):
 
 
 with open('folders.txt', 'r') as folders_file:
-    folder_list = [func(line) for line in folders_file.read().splitlines() if line]
+    folder_list = [func(line) for line in folders_file.read().splitlines() if line and line[0] != '#']
     print(folder_list)
+
+urls_list = []
 
 with open(file_paths[0], encoding="utf-8") as bookmarks_file:
     roots = json.load(bookmarks_file)["roots"]
@@ -62,7 +65,21 @@ with open(file_paths[0], encoding="utf-8") as bookmarks_file:
             else:
                 return [get_children(chi) for chi in dat['children']]
 
-        print(list(flatten(get_children(temp))))
+    urls_list += list(flatten(get_children(temp)))
 
 
 
+url_dict = {}
+for url in urls_list:
+    val = None
+    print(url)
+    if 'fanfiction.net' in url:
+        val = handle_fanfiction_story(url)
+
+    url_dict[url] = val
+
+
+print(url_dict)
+
+
+close_gracefully()
