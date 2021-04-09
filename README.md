@@ -3,3 +3,4 @@ I have lots of bookmarks. I need an easier way to see how behind I am on fanfict
 
 TODO:
 1. add update date and last-grabbed date (so we can see if there was an update since the last time the script was ran)
+2. add requirements.txt
