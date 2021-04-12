@@ -67,6 +67,22 @@ def handle_ao3_story(url):
         raise Exception('ao3 - wack')
 
 
-t = ['https://archiveofourown.org/works/11579037','https://archiveofourown.org/works/29158347/chapters/71750658', 'https://archiveofourown.org/series/2137872']
-# handle authors
-print(handle_ao3_story('https://archiveofourown.org/works/589726/chapters/6741035#workskin'))
+def handle_mangakakalot_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+
+    num_of_chapters = re.search(r'Chapter (\d+(?:\.\d+){0,1})',
+                                      soup.find('select', class_='navi-change-chapter').find('option').text).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+){0,1})', soup.find('h1', class_='current-chapter').text).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
+
+
+def handle_mangasushi_story(url):
+    pass
+
+
+print(handle_mangasushi_story('https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/'))
+# t = ['https://archiveofourown.org/series/2137872']
+# # handle authors
+# print(handle_ao3_story('https://archiveofourown.org/works/589726/chapters/6741035#workskin'))
