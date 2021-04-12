@@ -3,7 +3,7 @@ import os
 import re
 from collections.abc import Iterable
 
-from scrapers import handle_fanfiction_story, close_gracefully
+from scrapers import handle_fanfiction_story, close_gracefully, handle_ao3_story
 
 
 possible_paths = [
@@ -73,13 +73,14 @@ url_dict = {}
 for url in urls_list:
     val = None
     print(url)
-    if 'fanfiction.net' in url:
+    if 'fanfiction.net/s/' in url:
         val = handle_fanfiction_story(url)
-
+    elif "archiveofourown.org/works/" in url:
+        val = handle_ao3_story(url)
     url_dict[url] = val
 
 
 print(url_dict)
-
-
+print('\n'*10)
+print([k for k,v in url_dict.items() if v is None])
 close_gracefully()
