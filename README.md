@@ -6,6 +6,7 @@ TODO:
 2. add requirements.txt
 3. detect updates on ao3 series (not just one link)
 4. include authors
+5. handle other sites besides ao3 and fanfiction.net. look out for mangadex, mangakakalot, light novel sites, other manga sites, and wattpad.
 
 
 
