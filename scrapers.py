@@ -79,9 +79,24 @@ def handle_mangakakalot_story(url):
 
 
 def handle_mangasushi_story(url):
-    pass
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+
+    # possibly
+    # https://mangasushi.net/?s=just+by+living+there+i+become+the+strongest+in+the+world&post_type=wp-manga&op=&author=&artist=&release=&adult=
+    # https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/
+    # https://mangasushi.net/manga/ore-no-ie-ga-maryoku-spot-datta-ken-sundeiru-dake-de-sekai-saikyou/chapter-54/
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+
+    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+){0,1})', soup.find('select', class_='selectpicker single-chapter-select').option['value']).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+){0,1})', soup.find(id='chapter-heading').text).groups()[0]
+
+    return float(num_of_chapters) > float(chapter_num)
 
 
+print(handle_mangasushi_story('https://mangasushi.net/manga/ore-no-ie-ga-maryoku-spot-datta-ken-sundeiru-dake-de-sekai-saikyou/chapter-54/'))
 print(handle_mangasushi_story('https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/'))
 # t = ['https://archiveofourown.org/series/2137872']
 # # handle authors
