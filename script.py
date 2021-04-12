@@ -3,7 +3,7 @@ import os
 import re
 from collections.abc import Iterable
 
-from scrapers import handle_fanfiction_story, close_gracefully, handle_ao3_story, handle_mangakakalot_story
+from scrapers import handle_fanfiction_story, close_gracefully, handle_ao3_story, handle_mangakakalot_story, handle_mangasushi_story
 
 
 possible_paths = [
@@ -79,6 +79,10 @@ for url in urls_list:
         val = handle_ao3_story(url)
     elif "mangakakalot.com/chapter/" in url:
         val = handle_mangakakalot_story(url)
+    elif re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url):
+        val = handle_mangasushi_story(url)
+
+
     url_dict[url] = val
 
 

@@ -83,6 +83,7 @@ def handle_mangasushi_story(url):
     content = driver.page_source
     soup = bs4.BeautifulSoup(content, 'html.parser')
 
+
     # possibly
     # https://mangasushi.net/?s=just+by+living+there+i+become+the+strongest+in+the+world&post_type=wp-manga&op=&author=&artist=&release=&adult=
     # https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/
