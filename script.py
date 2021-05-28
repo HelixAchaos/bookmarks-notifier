@@ -3,8 +3,8 @@ import os
 import re
 from collections.abc import Iterable
 
-from scrapers import handle_fanfiction_story, close_gracefully, handle_ao3_story, handle_mangakakalot_story, handle_mangasushi_story
-
+from scrapers import handle_fanfiction_story, close_gracefully, handle_ao3_story, handle_mangakakalot_story, handle_mangasushi_story, handle_mangatx_story, \
+    handle_hiperdex_story, handle_readmanganato_story, handle_isekaiscan_story
 
 possible_paths = [
     os.path.expanduser("~/.config/google-chrome/Default/Bookmarks"),
@@ -72,7 +72,7 @@ with open(file_paths[0], encoding="utf-8") as bookmarks_file:
 url_dict = {}
 for url in urls_list:
     val = None
-    print(url)
+    # print(url)
     if 'fanfiction.net/s/' in url:
         val = handle_fanfiction_story(url)
     elif "archiveofourown.org/works/" in url:
@@ -81,7 +81,19 @@ for url in urls_list:
         val = handle_mangakakalot_story(url)
     elif re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url):
         val = handle_mangasushi_story(url)
-
+    elif re.search(r'mangatx.com/manga/[\w-]+/chapter-', url):
+        val = handle_mangatx_story(url)
+    elif re.search(r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url):
+        val = handle_hiperdex_story(url)
+    elif re.search(r'https://readmanganato.com/[\w-]+/chapter-', url):
+        val = handle_readmanganato_story(url)
+    elif re.search(r'https://isekaiscan.com/manga/[\w-]+/chapter-', url):
+        val = handle_isekaiscan_story(url)
+    if not(re.search(r'https://readmanganato.com/[\w-]+/chapter-', url) or re.search(r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url) or re.search(
+            r'mangatx.com/manga/[\w-]+/chapter-', url) or 'fanfiction.net/s/' in url or
+           "archiveofourown.org/works/" in url or
+    "mangakakalot.com/chapter/" in url or re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url)):
+        print(url)
 
     url_dict[url] = val
 
@@ -90,3 +102,6 @@ print(url_dict)
 print('\n'*10)
 print([k for k,v in url_dict.items() if v is None])
 close_gracefully()
+
+
+dne_404 = ['https://www.pmscans.com/manga/leveling-up-by-only-eating/chapter-50/?style=list']

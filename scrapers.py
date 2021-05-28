@@ -29,7 +29,7 @@ def handle_fanfiction_story(url):
         else:
             num_of_chapters = 1  # one-shot
 
-        chapter_num = re.search(r'https://www.fanfiction.net/s/\d+/(\d+)(?:/[\s\S]*){0,1}', url).groups()[0]
+        chapter_num = re.search(r'https://www.fanfiction.net/s/\d+/(\d+)(?:/[\s\S]*)?', url).groups()[0]
         return int(num_of_chapters) > int(chapter_num)
     except AttributeError:  # if story is not found or no longer available
         raise Exception('ffn - wack')
@@ -72,11 +72,22 @@ def handle_mangakakalot_story(url):
     content = driver.page_source
     soup = bs4.BeautifulSoup(content, 'html.parser')
 
-    num_of_chapters = re.search(r'Chapter (\d+(?:\.\d+){0,1})',
+    num_of_chapters = re.search(r'Chapter (\d+(?:\.\d+)?)',
                                       soup.find('select', class_='navi-change-chapter').find('option').text).groups()[0]
-    chapter_num = re.search(r'Chapter (\d+(?:\.\d+){0,1})', soup.find('h1', class_='current-chapter').text).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+)?)', soup.find('h1', class_='current-chapter').text).groups()[0]
+
     return float(num_of_chapters) > float(chapter_num)
 
+def handle_mangatx_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').findChildren('option')[
+        -1]['value']).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+)?)', soup.find(id='chapter-heading').text).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
 
 def handle_mangasushi_story(url):
     driver.get(url)
@@ -91,14 +102,48 @@ def handle_mangasushi_story(url):
     if soup.find('section', class_='error-404 not-found'):
         return -1
 
-    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+){0,1})', soup.find('select', class_='selectpicker single-chapter-select').option['value']).groups()[0]
-    chapter_num = re.search(r'Chapter (\d+(?:\.\d+){0,1})', soup.find(id='chapter-heading').text).groups()[0]
+    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').option['value']).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+)?)', soup.find(id='chapter-heading').text).groups()[0]
 
     return float(num_of_chapters) > float(chapter_num)
 
+def handle_hiperdex_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = soup.find('select', class_='selectpicker single-chapter-select').option['value'].replace('-','.')
+    chapter_num = re.search(r'(\d+(?:\.\d+)?)', soup.find(id='chapter-heading').text).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
 
-print(handle_mangasushi_story('https://mangasushi.net/manga/ore-no-ie-ga-maryoku-spot-datta-ken-sundeiru-dake-de-sekai-saikyou/chapter-54/'))
-print(handle_mangasushi_story('https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/'))
+def handle_readmanganato_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'(\d+(?:\.\d+)?)', soup.find('select', class_='navi-change-chapter').option.text).groups()[0]
+    chapter_num = re.search(r'chapter-(\d+(?:\.\d+)?)',url).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
+
+def handle_isekaiscan_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').option.text).groups()[0]
+    chapter_num = re.search(r'chapter-(\d+(?:\.\d+)?)',url).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
+
+#
+# print(handle_mangasushi_story('https://mangasushi.net/manga/ore-no-ie-ga-maryoku-spot-datta-ken-sundeiru-dake-de-sekai-saikyou/chapter-54/'))
+# print(handle_mangasushi_story('https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/'))
 # t = ['https://archiveofourown.org/series/2137872']
 # # handle authors
 # print(handle_ao3_story('https://archiveofourown.org/works/589726/chapters/6741035#workskin'))
+# print(handle_mangatx_story('https://mangatx.com/manga/reverse-villain/chapter-48/'))
+# print(handle_hiperdex_story('https://hiperdex.com/manga/the-wrong-way-to-use-healing-magic-en/034/'))
+# print(handle_readmanganato_story('https://readmanganato.com/manga-gv983530/chapter-10'))
+print(handle_isekaiscan_story('https://isekaiscan.com/manga/a-breakthrough-brought-by-forbidden-master-and-disciple/chapter-10/'))
