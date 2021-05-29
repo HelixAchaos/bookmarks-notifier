@@ -172,7 +172,16 @@ def handle_toonily_story(url):
     print(num_of_chapters, chapter_num)
     return float(num_of_chapters) > float(chapter_num)
 
-
+def handle_mangajar_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = soup.find('select', {'id':'item-select'}).find('option').text.strip()
+    chapter_num = re.search('chapter/(\d+(?:\.\d+)?)', url).groups()[0]
+    print(num_of_chapters, chapter_num)
+    return float(num_of_chapters) > float(chapter_num)
 
 
 
@@ -188,6 +197,8 @@ def handle_mangakik_story(url):
         """
     print("We don't deal with mangakik")
 
+
+# print(handle_mangajar_story('https://mangajar.com/manga/arafoo-kenja-no-isekai-seikatsu-nikki/chapter/20'))
 # print(handle_mangakik_story('https://mangakik.com/manga/mushoku-tensei-isekai-ittara-honki-dasu/chapter-70/'))
 # print(handle_nitroscans_story('https://nitroscans.com/manga/player/chapter-27/'))
 # print(handle_mangaclash_story('https://mangaclash.com/manga/the-max-level-hero-has-returned/chapter-35/'))
