@@ -2,7 +2,9 @@ from selenium import webdriver
 import bs4
 import re
 
-
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 options = webdriver.ChromeOptions()
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -137,13 +139,55 @@ def handle_isekaiscan_story(url):
     chapter_num = re.search(r'chapter-(\d+(?:\.\d+)?)',url).groups()[0]
     return float(num_of_chapters) > float(chapter_num)
 
-#
-# print(handle_mangasushi_story('https://mangasushi.net/manga/ore-no-ie-ga-maryoku-spot-datta-ken-sundeiru-dake-de-sekai-saikyou/chapter-54/'))
-# print(handle_mangasushi_story('https://mangasushi.net/manga/my-house-is-a-magic-power-spot-just-by-living-there-i-become-the-strongest-in-the-world/chapter-54/'))
-# t = ['https://archiveofourown.org/series/2137872']
-# # handle authors
-# print(handle_ao3_story('https://archiveofourown.org/works/589726/chapters/6741035#workskin'))
-# print(handle_mangatx_story('https://mangatx.com/manga/reverse-villain/chapter-48/'))
-# print(handle_hiperdex_story('https://hiperdex.com/manga/the-wrong-way-to-use-healing-magic-en/034/'))
-# print(handle_readmanganato_story('https://readmanganato.com/manga-gv983530/chapter-10'))
-print(handle_isekaiscan_story('https://isekaiscan.com/manga/a-breakthrough-brought-by-forbidden-master-and-disciple/chapter-10/'))
+def handle_mangaclash_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').option.text).groups()[0]
+    chapter_num = re.search(r'chapter-(\d+(?:\.\d+)?)', url).groups()[0]
+    return float(num_of_chapters) > float(chapter_num)
+
+def handle_nitroscans_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').find('option')['value']).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+)?)', soup.find(id='chapter-heading').text).groups()[0]
+    print(num_of_chapters, chapter_num)
+    return float(num_of_chapters) > float(chapter_num)
+
+def handle_toonily_story(url):
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, 'html.parser')
+    if soup.find('section', class_='error-404 not-found'):
+        return -1
+    num_of_chapters = re.search(r'chapter-(\d+(?:\.\d+)?)', soup.find('select', class_='selectpicker single-chapter-select').findChildren('option')[
+        -1]['value']).groups()[0]
+    chapter_num = re.search(r'Chapter (\d+(?:\.\d+)?)', soup.find(id='chapter-heading').text).groups()[0]
+    print(num_of_chapters, chapter_num)
+    return float(num_of_chapters) > float(chapter_num)
+
+
+
+
+
+def handle_mangakik_story(url):
+    # driver.get(url)
+    # email = WebDriverWait(driver, 200).until(EC.visibility_of_element_located((By.CLASS_NAME, 'selectpicker single-chapter-select')))
+    # print(email)
+
+    """
+        basically, the <select class=selectpicker single-chapter-select> tag thingy holds all the option tags (that are the chapters). i planned on grabbing the
+        first option tag to get the last chapter number, but there's a delay in that tag. can't be bothered to deal with wait and selenium's html parser
+        thing. also, mangakik loads relatively really slowly on the webdriver popup window.
+        """
+    print("We don't deal with mangakik")
+
+# print(handle_mangakik_story('https://mangakik.com/manga/mushoku-tensei-isekai-ittara-honki-dasu/chapter-70/'))
+# print(handle_nitroscans_story('https://nitroscans.com/manga/player/chapter-27/'))
+# print(handle_mangaclash_story('https://mangaclash.com/manga/the-max-level-hero-has-returned/chapter-35/'))
