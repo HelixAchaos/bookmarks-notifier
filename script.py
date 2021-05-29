@@ -73,43 +73,43 @@ with open(file_paths[0], encoding="utf-8") as bookmarks_file:
 url_dict = {}
 for url in urls_list:
     val = None
-    # print(url)
+    print(url)
 
-    # if 'fanfiction.net/s/' in url:
-    #     val = handle_fanfiction_story(url)
-    # elif "archiveofourown.org/works/" in url:
-    #     val = handle_ao3_story(url)
-    # elif "mangakakalot.com/chapter/" in url:
-    #     val = handle_mangakakalot_story(url)
-    # elif re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url):
-    #     val = handle_mangasushi_story(url)
-    # elif re.search(r'mangatx.com/manga/[\w-]+/chapter-', url):
-    #     val = handle_mangatx_story(url)
-    # elif re.search(r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url):
-    #     val = handle_hiperdex_story(url)
-    # elif re.search(r'https://readmanganato.com/[\w-]+/chapter-', url):
-    #     val = handle_readmanganato_story(url)
-    # elif re.search(r'https://isekaiscan.com/manga/[\w-]+/chapter-', url):
-    #     val = handle_isekaiscan_story(url)
-    # elif re.search(r'https://mangaclash.com/manga/[\w-]+/chapter-', url):
-    #     val = handle_mangaclash_story(url)
-    # elif re.search(r'https://nitroscans.com/manga/[\w-]+/chapter-', url):
-    #     val = handle_nitroscans_story(url)
-    # elif re.search(r'https://toonily.net/manga/[\w-]+/chapter-', url):
-    #     val = handle_toonily_story(url)
-    # elif re.search(r'https://mangakik.com/manga/[\w-]+/chapter-', url):
-    #     val = handle_mangakik_story(url)
-    # elif re.search(r'https://mangajar.com/manga/[\w-]+/chapter/\d+(?:\.\d+)?', url):
-    #     val = handle_mangajar_story(url)
-    if not(re.search(r'https://nitroscans.com/manga/[\w-]+/chapter-', url) or re.search(r'https://readmanganato.com/[\w-]+/chapter-', url) or re.search(
-            r'https://mangaclash.com/manga/[\w-]+/chapter-', url) or re.search(
-            r'https://isekaiscan.com/manga/[\w-]+/chapter-', url) or re.search(
-            r'https://readmanganato.com/[\w-]+/chapter-', url) or re.search(
-            r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url) or re.search(
-            r'mangatx.com/manga/[\w-]+/chapter-', url) or 'fanfiction.net/s/' in url or
-           "archiveofourown.org/works/" in url or
-    "mangakakalot.com/chapter/" in url or re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url)):
-        print(url)
+    if 'fanfiction.net/s/' in url:
+        val = handle_fanfiction_story(url)
+    elif "archiveofourown.org/works/" in url:
+        val = handle_ao3_story(url)
+    elif "mangakakalot.com/chapter/" in url:
+        val = handle_mangakakalot_story(url)
+    elif re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url):
+        val = handle_mangasushi_story(url)
+    elif re.search(r'mangatx.com/manga/[\w-]+/chapter-', url):
+        val = handle_mangatx_story(url)
+    elif re.search(r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url):
+        val = handle_hiperdex_story(url)
+    elif re.search(r'https://readmanganato.com/[\w-]+/chapter-', url):
+        val = handle_readmanganato_story(url)
+    elif re.search(r'https://isekaiscan.com/manga/[\w-]+/chapter-', url):
+        val = handle_isekaiscan_story(url)
+    elif re.search(r'https://mangaclash.com/manga/[\w-]+/chapter-', url):
+        val = handle_mangaclash_story(url)
+    elif re.search(r'https://nitroscans.com/manga/[\w-]+/chapter-', url):
+        val = handle_nitroscans_story(url)
+    elif re.search(r'https://toonily.net/manga/[\w-]+/chapter-', url):
+        val = handle_toonily_story(url)
+    elif re.search(r'https://mangakik.com/manga/[\w-]+/chapter-', url):
+        val = handle_mangakik_story(url)
+    elif re.search(r'https://mangajar.com/manga/[\w-]+/chapter/\d+(?:\.\d+)?', url):
+        val = handle_mangajar_story(url)
+    # if not(re.search(r'https://nitroscans.com/manga/[\w-]+/chapter-', url) or re.search(r'https://readmanganato.com/[\w-]+/chapter-', url) or re.search(
+    #         r'https://mangaclash.com/manga/[\w-]+/chapter-', url) or re.search(
+    #         r'https://isekaiscan.com/manga/[\w-]+/chapter-', url) or re.search(
+    #         r'https://readmanganato.com/[\w-]+/chapter-', url) or re.search(
+    #         r'hiperdex.com/manga/[\w-]+/\d+(?:-\d)?', url) or re.search(
+    #         r'mangatx.com/manga/[\w-]+/chapter-', url) or 'fanfiction.net/s/' in url or
+    #        "archiveofourown.org/works/" in url or
+    # "mangakakalot.com/chapter/" in url or re.search(r'mangasushi.net/manga/[\s\S]+/chapter-', url)):
+    #     print(url)
 
     url_dict[url] = val
 
